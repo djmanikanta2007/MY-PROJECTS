@@ -209,7 +209,7 @@
 </head>
 <body>
 
-    <a href="/" class="back-nav"><i class="fas fa-arrow-left"></i> Back to Summit</a>
+    <a href="index.html" class="back-nav"><i class="fas fa-arrow-left"></i> Back to Summit</a>
 
     <div class="split-layout">
         <!-- Image Side -->
@@ -228,7 +228,7 @@
                     <p>Fill out the details below to claim your pass.</p>
                 </div>
                 
-                <form action="/submit" method="post">
+                <form id="registrationForm">
                     <div class="form-group">
                         <label class="form-label">Full Name</label>
                         <input type="text" class="form-control" name="name" placeholder="Rahul Sharma" required>
@@ -263,5 +263,25 @@
         </div>
     </div>
 
+    <script>
+        document.getElementById('registrationForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const participant = {
+                id: Date.now().toString(),
+                name: document.querySelector('input[name="name"]').value,
+                email: document.querySelector('input[name="email"]').value,
+                phone: document.querySelector('input[name="phone"]').value,
+                event: document.querySelector('select[name="event"]').value
+            };
+            
+            let participants = JSON.parse(localStorage.getItem('participants')) || [];
+            participants.push(participant);
+            localStorage.setItem('participants', JSON.stringify(participants));
+            
+            alert('Registration Successful! See you at the summit.');
+            window.location.href = 'index.html';
+        });
+    </script>
 </body>
 </html>
