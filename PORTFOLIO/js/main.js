@@ -178,7 +178,7 @@ document.addEventListener('DOMContentLoaded', () => {
       description: 'A full-stack event registration platform that allows organizers to create events and participants to register seamlessly. Includes participant management, CSV export functionality, and a clean user interface.',
       features: ['Event creation and management', 'Participant registration system', 'CSV export for participant data', 'SQLite database storage', 'Clean and intuitive UI', 'Real-time participant tracking'],
       tags: ['Python', 'Flask', 'SQLite', 'HTML/CSS', 'CSV Export'],
-      link: 'https://online-event-registration-system.onrender.com'
+      link: 'https://djmanikanta2007.github.io/student-result-management-system/OnlineEventRegistration/index.html'
     },
     'event-reels': {
       title: 'College Event Reels',
