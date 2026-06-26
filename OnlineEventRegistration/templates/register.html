@@ -1,48 +1,267 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register | Tech Innovators Summit 2026</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-dark: #0a0a0a;
+            --bg-panel: #111111;
+            --bg-input: #1a1a1a;
+            --accent-primary: #00f0ff;
+            --accent-secondary: #7000ff;
+            --text-primary: #ffffff;
+            --text-muted: #888888;
+            --border-color: rgba(255,255,255,0.1);
+        }
 
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-primary);
+            font-family: 'Inter', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            overflow-x: hidden;
+            position: relative;
+        }
 
-<title>Register Event</title>
+        /* Abstract Grid Background */
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-image: 
+                linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+            background-size: 50px 50px;
+            z-index: -2;
+        }
 
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+        /* Split Screen Layout */
+        .split-layout {
+            display: flex;
+            width: 100%;
+            min-height: 100vh;
+        }
 
+        .side-visual {
+            flex: 1;
+            background: linear-gradient(180deg, rgba(10,10,10,0) 0%, rgba(10,10,10,1) 100%),
+                        url('https://images.unsplash.com/photo-1540575467063-178a50c2df87?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80') center/cover no-repeat;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: 4rem;
+        }
+
+        .side-visual::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(135deg, rgba(112,0,255,0.4) 0%, rgba(0,240,255,0.2) 100%);
+            mix-blend-mode: overlay;
+        }
+
+        .visual-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .visual-content h2 {
+            font-size: 3rem;
+            font-weight: 800;
+            letter-spacing: -1px;
+            margin-bottom: 1rem;
+        }
+
+        .visual-content p {
+            color: rgba(255,255,255,0.8);
+            font-size: 1.1rem;
+            max-width: 400px;
+        }
+
+        .side-form {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            background: var(--bg-dark);
+            position: relative;
+        }
+
+        /* Form Container */
+        .form-container {
+            width: 100%;
+            max-width: 480px;
+            background: var(--bg-panel);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 3rem;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+            position: relative;
+        }
+
+        .form-header {
+            margin-bottom: 2.5rem;
+        }
+
+        .form-header h3 {
+            font-weight: 700;
+            font-size: 1.75rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .form-header p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        /* Inputs */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-weight: 600;
+        }
+
+        .form-control, .form-select {
+            background-color: var(--bg-input);
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+            padding: 0.875rem 1rem;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .form-control:focus, .form-select:focus {
+            background-color: rgba(255,255,255,0.05);
+            border-color: var(--accent-primary);
+            box-shadow: 0 0 0 0.25rem rgba(0, 240, 255, 0.15);
+            color: var(--text-primary);
+        }
+
+        .form-control::placeholder {
+            color: rgba(255,255,255,0.3);
+        }
+
+        .form-select {
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23888888' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3e%3c/svg%3e");
+        }
+
+        /* Buttons */
+        .btn-submit {
+            width: 100%;
+            padding: 1rem;
+            background: var(--text-primary);
+            color: var(--bg-dark);
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .btn-submit:hover {
+            background: var(--accent-primary);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0, 240, 255, 0.2);
+        }
+
+        .back-nav {
+            position: absolute;
+            top: 2rem;
+            left: 2rem;
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: color 0.2s ease;
+            z-index: 10;
+        }
+
+        .back-nav:hover {
+            color: var(--text-primary);
+        }
+
+        @media (max-width: 992px) {
+            .side-visual {
+                display: none;
+            }
+        }
+    </style>
 </head>
+<body>
 
-<body class="bg-light">
+    <a href="/" class="back-nav"><i class="fas fa-arrow-left"></i> Back to Summit</a>
 
-<div class="container mt-5">
+    <div class="split-layout">
+        <!-- Image Side -->
+        <div class="side-visual">
+            <div class="visual-content">
+                <h2>Join the Revolution.</h2>
+                <p>Secure your attendee pass to access exclusive keynotes, workshops, and networking events.</p>
+            </div>
+        </div>
 
-<div class="card p-4 shadow">
+        <!-- Form Side -->
+        <div class="side-form">
+            <div class="form-container">
+                <div class="form-header">
+                    <h3>Attendee Registration</h3>
+                    <p>Fill out the details below to claim your pass.</p>
+                </div>
+                
+                <form action="/submit" method="post">
+                    <div class="form-group">
+                        <label class="form-label">Full Name</label>
+                        <input type="text" class="form-control" name="name" placeholder="John Doe" required>
+                    </div>
 
-<h3 class="mb-4">Event Registration</h3>
+                    <div class="form-group">
+                        <label class="form-label">Email Address</label>
+                        <input type="email" class="form-control" name="email" placeholder="john@company.com" required>
+                    </div>
 
-<form action="/submit" method="post">
+                    <div class="form-group">
+                        <label class="form-label">Phone Number</label>
+                        <input type="tel" class="form-control" name="phone" placeholder="+1 (555) 000-0000" required>
+                    </div>
 
-<input class="form-control mb-3" name="name" placeholder="Full Name" required>
+                    <div class="form-group">
+                        <label class="form-label">Pass Type</label>
+                        <select class="form-select" name="event" required>
+                            <option value="" disabled selected>Select Access Level</option>
+                            <option>Developer Pass (Hackathon + Keynotes)</option>
+                            <option>Founder Pass (VIP Networking)</option>
+                            <option>Virtual Access Pass (Online Only)</option>
+                            <option>Student Pass (Workshops + Contests)</option>
+                        </select>
+                    </div>
 
-<input class="form-control mb-3" name="email" placeholder="Email" required>
-
-<input class="form-control mb-3" name="phone" placeholder="Phone Number" required>
-
-<select class="form-control mb-3" name="event">
-
-<option>Hackathon</option>
-<option>Workshop</option>
-<option>Tech Seminar</option>
-<option>Coding Contest</option>
-
-</select>
-
-<button type="submit" class="btn btn-success">Register</button>
-
-</form>
-
-</div>
-
-</div>
+                    <button type="submit" class="btn-submit">
+                        Complete Registration
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
 
 </body>
 </html>
