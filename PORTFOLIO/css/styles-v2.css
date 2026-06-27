@@ -345,6 +345,31 @@ section:last-of-type { border-bottom: none; }
 .footer { padding: 2rem 0; border-top: 1px solid var(--border-subtle); }
 .footer .container { display: flex; justify-content: space-between; align-items: center; color: var(--text-muted); font-size: 0.8rem; }
 
+/* ── FINISHING TOUCHES (PRELOADER & CURSOR) ────────── */
+#preloader {
+  position: fixed; inset: 0; background: var(--bg-base); z-index: 9999;
+  display: flex; align-items: center; justify-content: center;
+  transition: opacity 0.8s ease, visibility 0.8s ease;
+}
+.preloader-content {
+  opacity: 0; transform: translateY(20px);
+  animation: preloaderIn 1s cubic-bezier(0.19, 1, 0.22, 1) forwards;
+}
+.preloader-text {
+  font-family: var(--font-sans); font-size: 3rem; font-weight: 700; color: #fff;
+  letter-spacing: -0.05em; text-shadow: 0 0 20px rgba(255,255,255,0.3);
+}
+@keyframes preloaderIn {
+  to { opacity: 1; transform: translateY(0); }
+}
+
+#cursor-glow {
+  position: fixed; top: 0; left: 0; width: 600px; height: 600px;
+  background: radial-gradient(circle, rgba(255,255,255,0.04) 0%, transparent 60%);
+  border-radius: 50%; pointer-events: none; z-index: 10;
+  transform: translate(-50%, -50%); opacity: 0; transition: opacity 0.5s ease;
+}
+
 /* ── RESPONSIVE ────────────────────────────────────── */
 @media (max-width: 1024px) {
   .bento-grid { grid-template-columns: repeat(2, 1fr); }

@@ -6,6 +6,30 @@
 document.addEventListener('DOMContentLoaded', () => {
 
   // ──────────────────────────────────────────
+  // Feature 0: Finishing Touches (Preloader & Glow)
+  // ──────────────────────────────────────────
+  
+  const preloader = document.getElementById('preloader');
+  if (preloader) {
+    setTimeout(() => {
+      preloader.style.opacity = '0';
+      preloader.style.visibility = 'hidden';
+    }, 1200);
+  }
+
+  const cursorGlow = document.getElementById('cursor-glow');
+  if (cursorGlow) {
+    document.addEventListener('mousemove', (e) => {
+      cursorGlow.style.opacity = '1';
+      cursorGlow.style.left = e.clientX + 'px';
+      cursorGlow.style.top = e.clientY + 'px';
+    });
+    document.addEventListener('mouseleave', () => {
+      cursorGlow.style.opacity = '0';
+    });
+  }
+
+  // ──────────────────────────────────────────
   // Feature 1: Navigation
   // ──────────────────────────────────────────
 
