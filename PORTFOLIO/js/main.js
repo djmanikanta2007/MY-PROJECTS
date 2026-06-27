@@ -574,6 +574,61 @@ document.addEventListener('DOMContentLoaded', () => {
     }, 4000);
   };
 
+  /**
+   * Handle Review Form Submission
+   */
+  const reviewForm = document.getElementById('review-form');
+  if (reviewForm) {
+    reviewForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      
+      const submitBtn = reviewForm.querySelector('button[type="submit"]');
+      const originalBtnText = submitBtn.textContent;
+      submitBtn.textContent = 'Sending Review...';
+      
+      const name = document.getElementById('review-name').value;
+      const email = document.getElementById('review-email').value;
+      const message = document.getElementById('review-message').value;
+
+      fetch('/api/review', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ name, email, message })
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.success || data.message) {
+          showFormMessageCustom(reviewForm, 'Review submitted successfully! Thank you.', 'success');
+          reviewForm.reset();
+        } else {
+          showFormMessageCustom(reviewForm, data.error || 'Failed to send review.', 'error');
+        }
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        showFormMessageCustom(reviewForm, 'Server error. Please ensure the backend is running.', 'error');
+      })
+      .finally(() => {
+        if (submitBtn) submitBtn.textContent = originalBtnText;
+      });
+    });
+  }
+
+  const showFormMessageCustom = (form, text, type = 'success') => {
+    const existing = form.querySelector('.form-message');
+    if (existing) existing.remove();
+    const msg = document.createElement('div');
+    msg.className = `form-message form-message--${type}`;
+    msg.textContent = text;
+    form.appendChild(msg);
+    setTimeout(() => {
+      msg.classList.add('fade-out');
+      setTimeout(() => msg.remove(), 300);
+    }, 4000);
+  };
+
 
   // ──────────────────────────────────────────
   // Feature 9: Hero Elements Sequential Reveal

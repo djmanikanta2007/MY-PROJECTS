@@ -111,6 +111,48 @@ def handle_contact():
         print(f"Database error: {e}")
         return jsonify({"error": "Internal server error"}), 500
 
+# API Route to handle review form submissions
+@app.route('/api/review', methods=['POST'])
+def handle_review():
+    data = request.json
+    
+    if not data:
+        return jsonify({"error": "No data provided"}), 400
+        
+    name = data.get('name', '').strip()
+    email = data.get('email', '').strip()
+    message = data.get('message', '').strip()
+    
+    if not all([name, email, message]):
+        return jsonify({"error": "Name, email, and review text are required"}), 400
+        
+    try:
+        # Format specifically for reviews
+        review_message = f"--- WEBSITE REVIEW ---\n\n{message}"
+        
+        # Save to database
+        conn = sqlite3.connect(DB_NAME)
+        cursor = conn.cursor()
+        cursor.execute(
+            'INSERT INTO messages (name, email, message) VALUES (?, ?, ?)',
+            (name, email, review_message)
+        )
+        conn.commit()
+        conn.close()
+        
+        # Try to send email
+        email_sent = send_email_notification(name, email, review_message)
+        
+        return jsonify({
+            "success": True, 
+            "message": "Review submitted successfully! Thank you.",
+            "email_sent": email_sent
+        }), 201
+        
+    except Exception as e:
+        print(f"Database error: {e}")
+        return jsonify({"error": "Internal server error"}), 500
+
 # Simple admin endpoint to view messages (for local testing only)
 @app.route('/api/messages', methods=['GET'])
 def get_messages():
