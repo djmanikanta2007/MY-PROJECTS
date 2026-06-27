@@ -197,15 +197,19 @@
                             <div class="mb-3">
                                 <input type="text" class="form-control" name="roll" placeholder="Roll Number" required>
                             </div>
-                            <div class="mb-3">
-                                <input type="number" class="form-control" name="subject1" placeholder="Subject 1 Score" min="0" max="100" required>
+                            
+                            <div id="subjectsContainer">
+                                <div class="mb-3">
+                                    <input type="number" class="form-control" name="subject[]" placeholder="Subject Score" min="0" max="100" required>
+                                </div>
                             </div>
-                            <div class="mb-3">
-                                <input type="number" class="form-control" name="subject2" placeholder="Subject 2 Score" min="0" max="100" required>
+                            
+                            <div class="mb-4 text-end">
+                                <button type="button" class="btn btn-sm btn-outline-light" style="color: #333; border-color: rgba(0,0,0,0.1);" onclick="addSubject()">
+                                    <i class="fas fa-plus me-1"></i>Add Subject
+                                </button>
                             </div>
-                            <div class="mb-4">
-                                <input type="number" class="form-control" name="subject3" placeholder="Subject 3 Score" min="0" max="100" required>
-                            </div>
+                            
                             <button type="submit" class="btn btn-custom w-100">Calculate & Save</button>
                         </form>
                     </div>
@@ -228,7 +232,7 @@
                                     <tr>
                                         <th>Name</th>
                                         <th>Roll No</th>
-                                        <th>Score</th>
+                                        <th>Total Score</th>
                                         <th>Percentage</th>
                                         <th>Grade</th>
                                         <th>Actions</th>
@@ -239,7 +243,7 @@
                                     <tr>
                                         <td class="fw-bold">{{ s['name'] }}</td>
                                         <td class="text-muted">{{ s['roll'] }}</td>
-                                        <td>{{ s['total'] }}/300</td>
+                                        <td>{{ s['total'] }}</td>
                                         <td class="fw-bold">{{ "%.1f"|format(s['percentage']) }}%</td>
                                         <td>
                                             <span class="grade-badge grade-{{ s['grade'] }}">{{ s['grade'] }}</span>
@@ -276,6 +280,18 @@
     </div>
 
     <script>
+        // Dynamic subject addition
+        function addSubject() {
+            const container = document.getElementById('subjectsContainer');
+            const div = document.createElement('div');
+            div.className = 'mb-3 d-flex align-items-center gap-2';
+            div.innerHTML = `
+                <input type="number" class="form-control" name="subject[]" placeholder="Subject Score" min="0" max="100" required>
+                <button type="button" class="btn btn-sm btn-danger" onclick="this.parentElement.remove()" style="border-radius: 8px;"><i class="fas fa-times"></i></button>
+            `;
+            container.appendChild(div);
+        }
+
         const studentNames = [{% for s in students %}"{{ s['name'] }}",{% endfor %}];
         const studentMarks = [{% for s in students %}{{ s['percentage'] }},{% endfor %}];
 

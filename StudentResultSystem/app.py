@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, redirect
 import sqlite3
+import json
 
 app = Flask(__name__)
 
@@ -43,12 +44,18 @@ def add_student():
     try:
         name = request.form['name']
         roll = request.form['roll']
-        s1 = int(request.form['subject1'])
-        s2 = int(request.form['subject2'])
-        s3 = int(request.form['subject3'])
-
-        total = s1 + s2 + s3
-        percentage = total / 3
+        scores_list = request.form.getlist('subject[]')
+        
+        # Convert strings to integers
+        scores_int = [int(score) for score in scores_list if score.strip()]
+        
+        if not scores_int:
+            raise ValueError("No subjects provided.")
+            
+        total = sum(scores_int)
+        percentage = total / len(scores_int)
+        
+        scores_json = json.dumps(scores_int)
 
         if percentage >= 90:
             grade = "A"
@@ -61,8 +68,8 @@ def add_student():
 
         conn = get_db()
         conn.execute(
-            "INSERT INTO students VALUES (?,?,?,?,?,?,?,?)",
-            (name, roll, s1, s2, s3, total, percentage, grade)
+            "INSERT INTO students VALUES (?,?,?,?,?,?)",
+            (name, roll, scores_json, total, percentage, grade)
         )
         conn.commit()
         conn.close()
