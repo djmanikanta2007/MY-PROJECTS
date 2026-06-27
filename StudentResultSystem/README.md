@@ -1,55 +1,52 @@
-# Student Result Management System
+<div align="center">
+  <h1>🎓 Student Result Management System</h1>
+  <p>A premium, full-stack Flask application for administrators to securely manage, analyze, and visualize student academic results.</p>
+</div>
 
-The Student Result Management System is a web-based application built using Flask that allows administrators to manage and analyze student academic results efficiently. The system enables the admin to add student marks, automatically calculate total marks, percentage, and grades, and visualize student performance through graphs.
+## ✨ Features
 
-## Features
+- **Premium UI/UX:** A modern Glassmorphism dashboard with smooth gradients and animations.
+- **Dynamic Subject Support:** Add as many subjects as needed per student dynamically via JavaScript.
+- **Automatic Calculations:** The backend instantly calculates total marks, percentage, and grade logic.
+- **Real-Time Data Visualization:** Interactive bar charts powered by `Chart.js` tracking student percentages.
+- **CRUD Operations:** Fully functional SQLite database integration for adding and securely deleting student records.
+- **Admin Authentication:** Secure login portal for administrative access.
 
-- Admin Login Authentication
-- Add Student Marks
-- Automatic Total & Percentage Calculation
-- Automatic Grade Assignment (A/B/C/F)
-- Student Result Dashboard
-- Performance Graph using Chart.js
-- Responsive UI using Bootstrap
+## 🛠️ Technologies Used
 
-## Technologies Used
+- **Backend:** Python, Flask
+- **Database:** SQLite (JSON Array support)
+- **Frontend:** HTML5, CSS3, JavaScript
+- **Styling:** Bootstrap 5, FontAwesome Icons
+- **Data Visualization:** Chart.js
 
-- Python (Flask)
-- SQLite Database
-- HTML5
-- CSS3
-- Bootstrap
-- Chart.js
-- JavaScript
+## 🚀 How to Run Locally
 
-## How to Run the Project
+1. **Clone the repository:**
+   ```bash
+   git clone https://github.com/djmanikanta2007/student-result-management-system.git
+   cd student-result-management-system/StudentResultSystem
+   ```
 
-1. Install Flask
+2. **Install dependencies:**
+   ```bash
+   pip install flask
+   ```
 
-pip install flask
+3. **Initialize the database:**
+   ```bash
+   python create_db.py
+   ```
 
-2. Create the database
+4. **Run the application:**
+   ```bash
+   python app.py
+   ```
 
-python create_db.py
+5. **Open in browser:**
+   Navigate to `http://127.0.0.1:5000`
+   
+*(Demo Admin Login - Username: `admin` | Password: `1234`)*
 
-3. Run the application
-
-python app.py
-
-4. Open in browser
-
-http://127.0.0.1:5000
-
-## Project Structure
-
-StudentResultSystem/
-│
-├── app.py  
-├── create_db.py  
-├── students.db  
-│
-└── templates  
-    ├── login.html  
-    ├── dashboard.html  
-    ├── result.html  
-    └── index.html
+---
+*Developed by [Manikanta](https://github.com/djmanikanta2007)*
