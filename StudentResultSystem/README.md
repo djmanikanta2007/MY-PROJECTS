@@ -48,5 +48,15 @@
    
 *(Demo Admin Login - Username: `admin` | Password: `1234`)*
 
+## 🤖 AI-Assisted Development
+
+This project was built and upgraded using modern AI-assisted development workflows to accelerate feature delivery and ensure code quality. 
+Specifically, I partnered with **Antigravity (Google DeepMind)** to:
+- Architect the dynamic JSON-based database schema for infinite subject additions.
+- Rapidly prototype the Glassmorphism UI and integrate dynamic DOM manipulation using Javascript.
+- Implement robust Python `try/except` error handling for the backend API routes.
+
+This demonstrates my ability to effectively prompt, review, and integrate AI-generated solutions into a full-stack codebase.
+
 ---
 *Developed by [Manikanta](https://github.com/djmanikanta2007)*
