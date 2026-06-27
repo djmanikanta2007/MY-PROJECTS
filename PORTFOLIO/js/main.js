@@ -167,9 +167,10 @@ document.addEventListener('DOMContentLoaded', () => {
       title: 'Student Result Management System',
       category: 'Software Development',
       image: 'assets/images/project-student-result.svg',
-      description: 'A comprehensive web application built with Python Flask for managing student academic results. Features include adding, viewing, updating, and deleting student records with an intuitive interface and SQLite database backend.',
-      features: ['CRUD operations for student records', 'SQLite database integration', 'Flask web framework', 'Responsive web interface', 'Data validation and error handling', 'Search and filter functionality'],
-      tags: ['Python', 'Flask', 'SQLite', 'HTML/CSS', 'JavaScript']
+      description: 'A comprehensive frontend application for managing student academic results directly in the browser. Features dynamic Javascript DOM manipulation, Chart.js integration, and LocalStorage data persistence.',
+      features: ['CRUD operations with LocalStorage', 'Dynamic subject additions via Javascript', 'Interactive data visualization with Chart.js', 'Responsive Glassmorphism interface', 'Secure frontend authentication'],
+      tags: ['HTML/CSS', 'JavaScript', 'Chart.js', 'LocalStorage', 'Bootstrap 5'],
+      link: 'https://djmanikanta2007.github.io/student-result-management-system/StudentResultSystem/index.html'
     },
     'event-registration': {
       title: 'Online Event Registration System',
