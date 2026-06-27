@@ -32,13 +32,16 @@ A responsive, dynamic personal portfolio website to showcase projects and skills
   - Functional contact form with a Python/Flask backend.
 - **Tech Stack**: HTML, CSS, JavaScript, Flask, SQLite.
 
-### 3. Student Result Management System
+### 3. [Student Result Management System](https://djmanikanta2007.github.io/student-result-management-system/StudentResultSystem/index.html)
 An administrative application designed for educational institutions to securely input, manage, and distribute student exam results.
+- **Live Demo**: [View Project](https://djmanikanta2007.github.io/student-result-management-system/StudentResultSystem/index.html)
+- **ADMIN DETAILS** USERNAME:admin PASSWORD:1234
 - **Features**:
   - Administrator authentication and dashboard access.
-  - Database integration for robust student record tracking.
-  - Intuitive user interface for adding and updating grades.
-- **Tech Stack**: Python, Flask, SQLite.
+  - Premium Glassmorphism UI with interactive `Chart.js` data visualization.
+  - Dynamic subject inputs that calculate overall percentage in real-time.
+  - Database integration via browser `localStorage` for secure, serverless operation.
+- **Tech Stack**: HTML5, CSS3, JavaScript, LocalStorage, Chart.js.
 
 ---
 
