@@ -17,6 +17,7 @@
 ### 1. [Online Event Registration Platform](https://djmanikanta2007.github.io/student-result-management-system/OnlineEventRegistration/index.html)
 A sleek, premium tech-summit registration platform designed with a modern dark-mode UI. 
 - **Live Demo**: [View Project](https://djmanikanta2007.github.io/student-result-management-system/OnlineEventRegistration/index.html)
+- **ADMIN DETAILS** USERNAME:admin PASSWORD:1234
 - **Features**: 
   - Responsive split-screen registration form.
   - Interactive admin dashboard with live search and CSV data export functionality.
