@@ -40,35 +40,46 @@ def dashboard():
 
 @app.route('/add', methods=['POST'])
 def add_student():
+    try:
+        name = request.form['name']
+        roll = request.form['roll']
+        s1 = int(request.form['subject1'])
+        s2 = int(request.form['subject2'])
+        s3 = int(request.form['subject3'])
 
-    name = request.form['name']
-    roll = request.form['roll']
-    s1 = int(request.form['subject1'])
-    s2 = int(request.form['subject2'])
-    s3 = int(request.form['subject3'])
+        total = s1 + s2 + s3
+        percentage = total / 3
 
-    total = s1 + s2 + s3
-    percentage = total / 3
+        if percentage >= 90:
+            grade = "A"
+        elif percentage >= 75:
+            grade = "B"
+        elif percentage >= 60:
+            grade = "C"
+        else:
+            grade = "F"
 
-    if percentage >= 90:
-        grade = "A"
-    elif percentage >= 75:
-        grade = "B"
-    elif percentage >= 60:
-        grade = "C"
-    else:
-        grade = "F"
+        conn = get_db()
+        conn.execute(
+            "INSERT INTO students VALUES (?,?,?,?,?,?,?,?)",
+            (name, roll, s1, s2, s3, total, percentage, grade)
+        )
+        conn.commit()
+        conn.close()
 
+        return redirect("/dashboard")
+    except Exception as e:
+        conn = get_db()
+        students = conn.execute("SELECT * FROM students").fetchall()
+        conn.close()
+        return render_template("dashboard.html", students=students, error="Error adding student. Please ensure the roll number is unique.")
+
+@app.route('/delete/<roll>')
+def delete_student(roll):
     conn = get_db()
-
-    conn.execute(
-        "INSERT INTO students VALUES (?,?,?,?,?,?,?,?)",
-        (name, roll, s1, s2, s3, total, percentage, grade)
-    )
-
+    conn.execute("DELETE FROM students WHERE roll=?", (roll,))
     conn.commit()
     conn.close()
-
     return redirect("/dashboard")
 
 
