@@ -173,7 +173,7 @@
     <nav class="navbar navbar-dark">
         <div class="container">
             <a class="navbar-brand fw-bold" href="#"><i class="fas fa-graduation-cap me-2"></i>Admin Dashboard</a>
-            <a href="/" class="btn btn-outline-light btn-sm"><i class="fas fa-sign-out-alt me-2"></i>Logout</a>
+            <a href="index.html" class="btn btn-outline-light btn-sm"><i class="fas fa-sign-out-alt me-2"></i>Logout</a>
         </div>
     </nav>
 
@@ -187,10 +187,7 @@
                         <h5><i class="fas fa-user-plus me-2"></i>Add Record</h5>
                     </div>
                     <div class="glass-card-body">
-                        {% if error %}
-                        <div class="alert alert-danger py-2" style="font-size: 0.9rem;">{{ error }}</div>
-                        {% endif %}
-                        <form action="/add" method="post">
+                        <form id="addStudentForm">
                             <div class="mb-3">
                                 <input type="text" class="form-control" name="name" placeholder="Full Name" required>
                             </div>
@@ -223,7 +220,7 @@
                 <div class="glass-card mb-4">
                     <div class="glass-card-header d-flex justify-content-between align-items-center">
                         <h5><i class="fas fa-table me-2"></i>Student Results Database</h5>
-                        <span class="badge bg-light text-dark">{{ students|length }} Students</span>
+                        <span class="badge bg-light text-dark" id="studentCount">0 Students</span>
                     </div>
                     <div class="glass-card-body p-0">
                         <div class="table-responsive">
@@ -238,27 +235,8 @@
                                         <th>Actions</th>
                                     </tr>
                                 </thead>
-                                <tbody>
-                                    {% for s in students %}
-                                    <tr>
-                                        <td class="fw-bold">{{ s['name'] }}</td>
-                                        <td class="text-muted">{{ s['roll'] }}</td>
-                                        <td>{{ s['total'] }}</td>
-                                        <td class="fw-bold">{{ "%.1f"|format(s['percentage']) }}%</td>
-                                        <td>
-                                            <span class="grade-badge grade-{{ s['grade'] }}">{{ s['grade'] }}</span>
-                                        </td>
-                                        <td>
-                                            <a href="/delete/{{ s['roll'] }}" class="btn-delete" onclick="return confirm('Delete this record?');">
-                                                <i class="fas fa-trash"></i>
-                                            </a>
-                                        </td>
-                                    </tr>
-                                    {% else %}
-                                    <tr>
-                                        <td colspan="6" class="text-center py-4 text-muted">No student records found. Add one on the left!</td>
-                                    </tr>
-                                    {% endfor %}
+                                <tbody id="studentTableBody">
+                                    <!-- Populated by JS -->
                                 </tbody>
                             </table>
                         </div>
@@ -280,6 +258,26 @@
     </div>
 
     <script>
+    <script>
+        // Initialize local storage array
+        let students = JSON.parse(localStorage.getItem('studentResults')) || [];
+
+        // Add dummy data if empty for demo purposes
+        if (students.length === 0) {
+            students = [
+                { name: "Rahul Sharma", roll: "CS001", total: 275, percentage: 91.6, grade: "A" },
+                { name: "Priya Patel", roll: "CS002", total: 230, percentage: 76.6, grade: "B" },
+                { name: "Amit Kumar", roll: "CS003", total: 195, percentage: 65.0, grade: "C" }
+            ];
+            saveData();
+        }
+
+        let myChart = null;
+
+        function saveData() {
+            localStorage.setItem('studentResults', JSON.stringify(students));
+        }
+
         // Dynamic subject addition
         function addSubject() {
             const container = document.getElementById('subjectsContainer');
@@ -292,45 +290,115 @@
             container.appendChild(div);
         }
 
-        const studentNames = [{% for s in students %}"{{ s['name'] }}",{% endfor %}];
-        const studentMarks = [{% for s in students %}{{ s['percentage'] }},{% endfor %}];
+        function loadStudents() {
+            const tbody = document.getElementById('studentTableBody');
+            document.getElementById('studentCount').innerText = `${students.length} Students`;
+            tbody.innerHTML = '';
 
-        const ctx = document.getElementById('performanceChart').getContext('2d');
-        
-        // Gradient for chart bars
-        let gradient = ctx.createLinearGradient(0, 0, 0, 400);
-        gradient.addColorStop(0, '#6a11cb');   
-        gradient.addColorStop(1, '#2575fc');
+            if (students.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="6" class="text-center py-4 text-muted">No student records found. Add one on the left!</td></tr>`;
+            } else {
+                students.forEach((s, index) => {
+                    tbody.innerHTML += `
+                        <tr>
+                            <td class="fw-bold">${s.name}</td>
+                            <td class="text-muted">${s.roll}</td>
+                            <td>${s.total}</td>
+                            <td class="fw-bold">${s.percentage.toFixed(1)}%</td>
+                            <td><span class="grade-badge grade-${s.grade}">${s.grade}</span></td>
+                            <td>
+                                <button class="btn-delete" onclick="deleteStudent(${index})">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    `;
+                });
+            }
+            updateChart();
+        }
 
-        new Chart(ctx, {
-            type: 'bar',
-            data: {
-                labels: studentNames,
-                datasets: [{
-                    label: 'Overall Percentage',
-                    data: studentMarks,
-                    backgroundColor: gradient,
-                    borderRadius: 6,
-                    borderWidth: 0
-                }]
-            },
-            options: {
-                responsive: true,
-                plugins: {
-                    legend: { display: false }
+        document.getElementById('addStudentForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const name = document.querySelector('input[name="name"]').value;
+            const roll = document.querySelector('input[name="roll"]').value;
+            
+            // Collect all dynamic subjects
+            const subjectInputs = document.querySelectorAll('input[name="subject[]"]');
+            let total = 0;
+            let count = 0;
+            
+            subjectInputs.forEach(input => {
+                if (input.value) {
+                    total += parseInt(input.value);
+                    count++;
+                }
+            });
+
+            if (count === 0) return alert("Please add at least one subject.");
+
+            const percentage = total / count;
+            let grade = 'F';
+            if (percentage >= 90) grade = 'A';
+            else if (percentage >= 75) grade = 'B';
+            else if (percentage >= 60) grade = 'C';
+
+            // Check duplicate roll
+            if (students.some(s => s.roll === roll)) {
+                alert("Error: Roll number already exists!");
+                return;
+            }
+
+            students.push({ name, roll, total, percentage, grade });
+            saveData();
+            loadStudents();
+            this.reset();
+        });
+
+        function deleteStudent(index) {
+            if (confirm("Delete this record?")) {
+                students.splice(index, 1);
+                saveData();
+                loadStudents();
+            }
+        }
+
+        function updateChart() {
+            const studentNames = students.map(s => s.name);
+            const studentMarks = students.map(s => s.percentage);
+
+            const ctx = document.getElementById('performanceChart').getContext('2d');
+            let gradient = ctx.createLinearGradient(0, 0, 0, 400);
+            gradient.addColorStop(0, '#6a11cb');   
+            gradient.addColorStop(1, '#2575fc');
+
+            if (myChart) myChart.destroy();
+
+            myChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: studentNames,
+                    datasets: [{
+                        label: 'Overall Percentage',
+                        data: studentMarks,
+                        backgroundColor: gradient,
+                        borderRadius: 6,
+                        borderWidth: 0
+                    }]
                 },
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        max: 100,
-                        grid: { color: 'rgba(0,0,0,0.05)' }
-                    },
-                    x: {
-                        grid: { display: false }
+                options: {
+                    responsive: true,
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        y: { beginAtZero: true, max: 100, grid: { color: 'rgba(0,0,0,0.05)' } },
+                        x: { grid: { display: false } }
                     }
                 }
-            }
-        });
+            });
+        }
+
+        // Initialize on load
+        loadStudents();
     </script>
 </body>
 </html>

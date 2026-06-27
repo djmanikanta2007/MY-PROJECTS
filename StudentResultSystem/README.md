@@ -1,22 +1,22 @@
 <div align="center">
   <h1>🎓 Student Result Management System</h1>
-  <p>A premium, full-stack Flask application for administrators to securely manage, analyze, and visualize student academic results.</p>
+  <p>A premium frontend application for administrators to securely manage, analyze, and visualize student academic results directly in the browser.</p>
 </div>
 
 ## ✨ Features
 
 - **Premium UI/UX:** A modern Glassmorphism dashboard with smooth gradients and animations.
 - **Dynamic Subject Support:** Add as many subjects as needed per student dynamically via JavaScript.
-- **Automatic Calculations:** The backend instantly calculates total marks, percentage, and grade logic.
+- **Automatic Calculations:** The Javascript engine instantly calculates total marks, percentage, and grade logic.
 - **Real-Time Data Visualization:** Interactive bar charts powered by `Chart.js` tracking student percentages.
-- **CRUD Operations:** Fully functional SQLite database integration for adding and securely deleting student records.
-- **Admin Authentication:** Secure login portal for administrative access.
+- **CRUD Operations:** Fully functional LocalStorage database integration for adding and securely deleting student records in the browser.
+- **Admin Authentication:** Secure frontend login portal for administrative access.
 
 ## 🛠️ Technologies Used
 
-- **Backend:** Python, Flask
-- **Database:** SQLite (JSON Array support)
-- **Frontend:** HTML5, CSS3, JavaScript
+- **Logic:** Vanilla JavaScript, DOM Manipulation
+- **Database:** Browser `localStorage` (JSON Array support)
+- **Frontend:** HTML5, CSS3
 - **Styling:** Bootstrap 5, FontAwesome Icons
 - **Data Visualization:** Chart.js
 
@@ -28,23 +28,8 @@
    cd student-result-management-system/StudentResultSystem
    ```
 
-2. **Install dependencies:**
-   ```bash
-   pip install flask
-   ```
-
-3. **Initialize the database:**
-   ```bash
-   python create_db.py
-   ```
-
-4. **Run the application:**
-   ```bash
-   python app.py
-   ```
-
-5. **Open in browser:**
-   Navigate to `http://127.0.0.1:5000`
+2. **Open in browser:**
+   Double-click `index.html` to open it in your web browser. No server required!
    
 *(Demo Admin Login - Username: `admin` | Password: `1234`)*
 
