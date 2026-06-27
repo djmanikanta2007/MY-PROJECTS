@@ -167,7 +167,7 @@ document.addEventListener('DOMContentLoaded', () => {
       title: 'Student Result Management System',
       category: 'Software Development',
       image: 'assets/images/project-student-result.svg',
-      description: 'A comprehensive frontend application for managing student academic results directly in the browser. Features dynamic Javascript DOM manipulation, Chart.js integration, and LocalStorage data persistence.',
+      description: 'A comprehensive frontend application for managing student academic results directly in the browser. Features dynamic Javascript DOM manipulation, Chart.js integration, and LocalStorage data persistence.<br><br><strong>Demo Admin Login:</strong> Username: <code>admin</code> | Password: <code>1234</code>',
       features: ['CRUD operations with LocalStorage', 'Dynamic subject additions via Javascript', 'Interactive data visualization with Chart.js', 'Responsive Glassmorphism interface', 'Secure frontend authentication'],
       tags: ['HTML/CSS', 'JavaScript', 'Chart.js', 'LocalStorage', 'Bootstrap 5'],
       link: 'https://djmanikanta2007.github.io/student-result-management-system/StudentResultSystem/index.html'
@@ -176,7 +176,7 @@ document.addEventListener('DOMContentLoaded', () => {
       title: 'Online Event Registration System',
       category: 'Software Development',
       image: 'assets/images/project-event-registration.svg',
-      description: 'A full-stack event registration platform that allows organizers to create events and participants to register seamlessly. Includes participant management, CSV export functionality, and a clean user interface.',
+      description: 'A full-stack event registration platform that allows organizers to create events and participants to register seamlessly. Includes participant management, CSV export functionality, and a clean user interface.<br><br><strong>Demo Admin Login:</strong> Username: <code>admin</code> | Password: <code>1234</code>',
       features: ['Event creation and management', 'Participant registration system', 'CSV export for participant data', 'SQLite database storage', 'Clean and intuitive UI', 'Real-time participant tracking'],
       tags: ['Python', 'Flask', 'SQLite', 'HTML/CSS', 'CSV Export'],
       link: 'https://djmanikanta2007.github.io/student-result-management-system/OnlineEventRegistration/index.html'
