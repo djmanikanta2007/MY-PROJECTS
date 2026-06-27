@@ -240,7 +240,7 @@ document.addEventListener('DOMContentLoaded', () => {
       modalImage.src = project.image;
       modalImage.alt = project.title;
     }
-    if (modalDescription) modalDescription.textContent = project.description;
+    if (modalDescription) modalDescription.innerHTML = project.description;
 
     // Populate features list
     if (modalFeatures) {
