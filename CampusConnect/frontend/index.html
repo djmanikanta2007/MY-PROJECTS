@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CampusConnect AI</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+</head>
+<body>
+    <!-- The Living Background -->
+    <canvas id="swarm-canvas"></canvas>
+
+    <!-- UI Overlay Layer -->
+    <div class="ui-layer">
+        
+        <!-- Header -->
+        <header>
+            <div class="logo">
+                <span class="material-icons">school</span>
+                <h1>CampusConnect <span>AI</span></h1>
+            </div>
+            <div class="status-indicator">
+                <span class="dot" id="system-status-dot"></span>
+                <span id="system-status-text">System Online</span>
+            </div>
+        </header>
+
+        <!-- Central Interaction Hint -->
+        <div class="center-hint" id="interaction-hint">
+            <h2 id="ai-status">CLICK ANYWHERE TO AWAKEN</h2>
+            <p>Speak clearly into your microphone.</p>
+        </div>
+
+        <!-- Hidden Drawer: Chat Transcript (Left) -->
+        <aside class="drawer left-drawer">
+            <div class="drawer-tab">
+                <span class="material-icons">chat</span>
+            </div>
+            <div class="drawer-content chat-transcript" id="chat-transcript">
+                <div class="message ai">
+                    <div class="bubble">I am listening. What do you seek?</div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Hidden Drawer: References (Right) -->
+        <aside class="drawer right-drawer">
+            <div class="drawer-tab">
+                <span class="material-icons">auto_stories</span>
+            </div>
+            <div class="drawer-content panel-content" id="reference-content">
+                <div class="empty-state">
+                    <span class="material-icons">search</span>
+                    <p>When I access my neural memory, the exact source data will appear here.</p>
+                </div>
+            </div>
+        </aside>
+
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
