@@ -1,5 +1,7 @@
 # 🎓 CampusConnect: AI Voice Assistant for GITAM University
 
+**🌐 Live Demo / Working Model:** [CampusConnect Live Website](https://djmanikanta2007.github.io/MY-PROJECTS/CampusConnect/frontend/)
+
 ![CampusConnect Logo](frontend/favicon.ico)
 
 ## 📌 Project Overview
