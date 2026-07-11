@@ -1,73 +1,175 @@
-const statusText = document.getElementById('ai-status');
-const interactionHint = document.getElementById('interaction-hint');
-const transcriptContainer = document.getElementById('chat-transcript');
-const referenceContent = document.getElementById('reference-content');
+// ============================================================
+// CAMPUSCONNECT AI — App Logic (Upgraded, Bug-Fixed)
+// ============================================================
 
-// ⚠️ REPLACE THIS WITH YOUR n8n WEBHOOK URL 
+// DOM References
+const statusPill     = document.getElementById('status-pill');
+const statusDot      = document.getElementById('status-dot');
+const statusText     = document.getElementById('status-text');
+const chatMessages   = document.getElementById('chat-messages');
+const orbContainer   = document.getElementById('orb-container');
+const orbIcon        = document.getElementById('orb-icon');
+const aiStatusLabel  = document.getElementById('ai-status-label');
+const aiStatusSub    = document.getElementById('ai-status-sub');
+const micBtn         = document.getElementById('mic-btn');
+const micIcon        = document.getElementById('mic-icon');
+const infoToggleBtn  = document.getElementById('info-toggle-btn');
+const infoModal      = document.getElementById('info-modal');
+const modalCloseBtn  = document.getElementById('modal-close-btn');
+const chipsContainer = document.getElementById('chips-container');
+
+// n8n Webhook URL — this sends text-based browser queries
 const N8N_WEBHOOK_URL = 'https://veraa.app.n8n.cloud/webhook/twilio-voice';
 
-// --- AI STATE MANAGEMENT ---
-let aiState = 'idle'; // idle, listening, thinking, speaking
+// ============================================================
+// STATE MANAGEMENT
+// ============================================================
+let aiState = 'idle'; // idle | listening | thinking | speaking
 
-function setAiState(state, message) {
-    aiState = state;
-    if (message) {
-        statusText.innerText = message;
-    }
+const STATE_CONFIG = {
+    idle:      { label: 'READY',       sub: 'Press the microphone to ask a question',   orbIcon: 'record_voice_over', statusLabel: 'System Online', micIcon: 'mic'  },
+    listening: { label: 'LISTENING',   sub: 'Speak clearly into your microphone...',     orbIcon: 'mic',               statusLabel: 'Listening...',   micIcon: 'stop' },
+    thinking:  { label: 'PROCESSING',  sub: 'Analyzing your question...',                orbIcon: 'psychology',        statusLabel: 'Processing...',  micIcon: 'mic'  },
+    speaking:  { label: 'RESPONDING',  sub: 'Click mic again when speech ends...',       orbIcon: 'volume_up',         statusLabel: 'Speaking...',    micIcon: 'mic'  },
+};
+
+function setAiState(newState) {
+    aiState = newState;
+    const cfg = STATE_CONFIG[newState];
+
+    // Update orb
+    orbContainer.className = `orb-container ${newState !== 'idle' ? newState : ''}`;
+    orbIcon.textContent = cfg.orbIcon;
+
+    // Update labels
+    aiStatusLabel.textContent    = cfg.label;
+    aiStatusLabel.className      = `ai-status-label ${newState !== 'idle' ? newState : ''}`;
+    aiStatusSub.textContent      = cfg.sub;
+
+    // Update header status pill
+    statusText.textContent       = cfg.statusLabel;
+    statusPill.className         = `status-pill ${newState !== 'idle' ? newState : ''}`;
+    statusDot.className          = `status-dot ${newState !== 'idle' ? newState : ''}`;
+
+    // Update mic button
+    micIcon.textContent          = cfg.micIcon;
+    micBtn.className             = `mic-btn ${newState === 'listening' ? 'listening' : ''}`;
 }
 
-// --- SPEECH RECOGNITION & SYNTHESIS ---
-const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-const recognition = new SpeechRecognition();
-recognition.continuous = false;
-recognition.interimResults = false;
-recognition.lang = 'en-US';
+// ============================================================
+// SPEECH RECOGNITION — BUG FIXED (proper error handling)
+// ============================================================
 
+// Bug Fix 1: Safely check for SpeechRecognition support before calling new
+const SpeechRecognitionAPI = window.SpeechRecognition || window.webkitSpeechRecognition;
+let recognition = null;
+
+if (SpeechRecognitionAPI) {
+    recognition = new SpeechRecognitionAPI();
+    recognition.continuous = false;
+    recognition.interimResults = false;
+    recognition.lang = 'en-US';
+} else {
+    // Gracefully disable mic button if browser doesn't support it
+    micBtn.disabled = true;
+    aiStatusSub.textContent = '⚠️ Your browser does not support voice input. Try Chrome or Edge.';
+}
+
+// ============================================================
+// SPEECH SYNTHESIS — BUG FIXED (correct voice selection)
+// ============================================================
 const synth = window.speechSynthesis;
-window.speechSynthesis.onvoiceschanged = () => synth.getVoices();
+let voices = [];
+
+// Pre-load voices when they are available
+if (synth) {
+    const loadVoices = () => { voices = synth.getVoices(); };
+    synth.onvoiceschanged = loadVoices;
+    loadVoices(); // Also call immediately for browsers that load them synchronously
+}
+
+function speakText(text) {
+    if (!synth) return;
+    if (synth.speaking) synth.cancel();
+
+    const utterThis = new SpeechSynthesisUtterance(text);
+    utterThis.rate = 1.0;
+    utterThis.pitch = 1.05;
+
+    // Bug Fix 2: Proper voice selection — search by language, not by incorrect "Female" keyword
+    const preferredVoice = voices.find(v =>
+        v.lang.startsWith('en') && (
+            v.name.includes('Google') ||
+            v.name.includes('Samantha') ||
+            v.name.includes('Karen') ||
+            v.name.includes('Moira') ||
+            v.name.includes('Zira')
+        )
+    ) || voices.find(v => v.lang.startsWith('en'));
+
+    if (preferredVoice) utterThis.voice = preferredVoice;
+
+    utterThis.onstart = () => setAiState('speaking');
+    utterThis.onend   = () => setAiState('idle');
+    utterThis.onerror = () => setAiState('idle');
+
+    synth.speak(utterThis);
+}
+
+// ============================================================
+// CHAT UI HELPERS
+// ============================================================
 
 function addMessage(text, sender) {
+    // Remove any typing indicator first
+    const typing = document.getElementById('typing-indicator');
+    if (typing) typing.remove();
+
     const msgDiv = document.createElement('div');
     msgDiv.className = `message ${sender}`;
-    msgDiv.innerHTML = `<div class="bubble">${text}</div>`;
-    transcriptContainer.appendChild(msgDiv);
-    transcriptContainer.scrollTop = transcriptContainer.scrollHeight;
+
+    const avatarDiv = document.createElement('div');
+    avatarDiv.className = `avatar ${sender === 'ai' ? 'ai-avatar' : 'user-avatar'}`;
+    if (sender === 'ai') {
+        avatarDiv.innerHTML = '<span class="material-icons-round">smart_toy</span>';
+    } else {
+        avatarDiv.textContent = '👤';
+    }
+
+    const bubbleDiv = document.createElement('div');
+    bubbleDiv.className = 'bubble';
+    bubbleDiv.textContent = text;
+
+    msgDiv.appendChild(avatarDiv);
+    msgDiv.appendChild(bubbleDiv);
+    chatMessages.appendChild(msgDiv);
+    chatMessages.scrollTop = chatMessages.scrollHeight;
 }
 
-function updateReferences(referencesText) {
-    if (!referencesText) return;
-    if (referenceContent.querySelector('.empty-state')) {
-        referenceContent.innerHTML = '';
-    }
-    const refCard = document.createElement('div');
-    refCard.className = 'reference-card';
-    refCard.innerHTML = `
-        <h3><span class="material-icons">data_object</span> Source Matrix</h3>
-        <p>${referencesText}</p>
+function showTypingIndicator() {
+    const typing = document.createElement('div');
+    typing.className = 'message ai typing-indicator';
+    typing.id = 'typing-indicator';
+    typing.innerHTML = `
+        <div class="avatar ai-avatar"><span class="material-icons-round">smart_toy</span></div>
+        <div class="bubble">
+            <div class="typing-dot"></div>
+            <div class="typing-dot"></div>
+            <div class="typing-dot"></div>
+        </div>
     `;
-    referenceContent.insertBefore(refCard, referenceContent.firstChild);
+    chatMessages.appendChild(typing);
+    chatMessages.scrollTop = chatMessages.scrollHeight;
 }
 
-// Click anywhere on canvas to start
-document.addEventListener('click', (e) => {
-    // Ignore clicks on drawers
-    if (e.target.closest('.drawer')) return;
-    
-    if (aiState === 'idle') {
-        try {
-            interactionHint.style.opacity = '0';
-            recognition.start();
-            setAiState('listening', 'LISTENING...');
-        } catch (err) {
-            console.error(err);
-        }
-    }
-});
+// ============================================================
+// API CALL TO n8n
+// ============================================================
 
-recognition.onresult = async (event) => {
-    const userText = event.results[0][0].transcript;
+async function askQuestion(userText) {
     addMessage(userText, 'user');
-    setAiState('thinking', 'PROCESSING...');
+    setAiState('thinking');
+    showTypingIndicator();
 
     try {
         const response = await fetch(N8N_WEBHOOK_URL, {
@@ -77,79 +179,125 @@ recognition.onresult = async (event) => {
         });
 
         const responseText = await response.text();
-        let data;
-        let aiText = "Connection lost.";
-        let reference = null;
+        let aiText = 'I could not connect to the knowledge base. Please check the n8n workflow.';
 
         try {
-            data = JSON.parse(responseText);
-            if (data.answer) {
-                aiText = data.answer;
-                reference = data.reference;
-            } else if (data.message && data.message.content) {
-                aiText = data.message.content; 
-            } else if (typeof data === 'string') {
-                 aiText = data;
-            } else {
-                 aiText = JSON.stringify(data);
-            }
-        } catch (e) {
-            console.warn("n8n did not return JSON");
+            const data = JSON.parse(responseText);
+            if (data.answer)                         aiText = data.answer;
+            else if (data.message?.content)          aiText = data.message.content;
+            else if (typeof data === 'string')       aiText = data;
+            else                                     aiText = JSON.stringify(data);
+        } catch {
+            // n8n returned TwiML XML (phone call format)
             if (responseText.includes('<Say')) {
                 const match = responseText.match(/<Say[^>]*>([\s\S]*?)<\/Say>/);
-                aiText = match ? match[1] : "Update n8n to JSON format.";
+                aiText = match ? match[1].trim() : 'Received a phone-format response. Please update n8n to return JSON.';
+            } else {
+                aiText = responseText.trim() || 'Empty response from server.';
             }
         }
 
         addMessage(aiText, 'ai');
-        if (reference) updateReferences(reference);
         speakText(aiText);
 
     } catch (error) {
-        setAiState('idle', 'SYSTEM ERROR');
-        addMessage("n8n connection failed.", 'ai');
+        console.error('Fetch error:', error);
+        const typing = document.getElementById('typing-indicator');
+        if (typing) typing.remove();
+        addMessage('⚠️ Could not reach the n8n server. Check your internet connection or webhook URL.', 'ai');
+        setAiState('idle');
     }
-};
-
-recognition.onerror = () => {
-    setAiState('idle', 'AWAKEN SYSTEM');
-    interactionHint.style.opacity = '1';
-};
-
-function speakText(text) {
-    if (synth.speaking) synth.cancel();
-    const utterThis = new SpeechSynthesisUtterance(text);
-    
-    const voices = synth.getVoices();
-    const preferredVoice = voices.find(v => v.name.includes('Female') || v.name.includes('Samantha'));
-    if (preferredVoice) utterThis.voice = preferredVoice;
-
-    utterThis.onstart = () => {
-        setAiState('speaking', 'TRANSMITTING...');
-        interactionHint.style.opacity = '1';
-    };
-    utterThis.onend = () => {
-        setAiState('idle', 'AWAKEN SYSTEM');
-        interactionHint.style.opacity = '1';
-    };
-    utterThis.onerror = () => {
-        setAiState('idle', 'AWAKEN SYSTEM');
-        interactionHint.style.opacity = '1';
-    };
-
-    synth.speak(utterThis);
 }
 
-// --- HTML5 CANVAS PARTICLE ENGINE ---
+// ============================================================
+// MICROPHONE BUTTON
+// ============================================================
+
+micBtn.addEventListener('click', () => {
+    if (!recognition) return;
+
+    if (aiState === 'listening') {
+        recognition.stop();
+        setAiState('idle');
+        return;
+    }
+
+    if (aiState !== 'idle') return;
+
+    try {
+        recognition.start();
+        setAiState('listening');
+    } catch (err) {
+        console.error('Recognition start error:', err);
+        setAiState('idle');
+    }
+});
+
+if (recognition) {
+    recognition.onresult = (event) => {
+        const userText = event.results[0][0].transcript;
+        setAiState('thinking');
+        askQuestion(userText);
+    };
+
+    recognition.onerror = (event) => {
+        console.error('Speech recognition error:', event.error);
+        const typing = document.getElementById('typing-indicator');
+        if (typing) typing.remove();
+        setAiState('idle');
+
+        if (event.error === 'not-allowed') {
+            addMessage('⚠️ Microphone access was denied. Please allow microphone access in your browser settings and try again.', 'ai');
+        } else if (event.error === 'no-speech') {
+            addMessage("I didn't hear anything. Please try again.", 'ai');
+        }
+    };
+
+    recognition.onend = () => {
+        if (aiState === 'listening') setAiState('idle');
+    };
+}
+
+// ============================================================
+// QUICK QUESTION CHIPS
+// ============================================================
+
+chipsContainer.querySelectorAll('.chip').forEach(chip => {
+    chip.addEventListener('click', () => {
+        if (aiState !== 'idle') return;
+        const question = chip.dataset.question;
+        if (question) askQuestion(question);
+    });
+});
+
+// ============================================================
+// INFO MODAL
+// ============================================================
+
+infoToggleBtn.addEventListener('click', () => {
+    infoModal.classList.add('visible');
+});
+
+modalCloseBtn.addEventListener('click', () => {
+    infoModal.classList.remove('visible');
+});
+
+infoModal.addEventListener('click', (e) => {
+    if (e.target === infoModal) infoModal.classList.remove('visible');
+});
+
+// ============================================================
+// HTML5 CANVAS PARTICLE ENGINE — BUG FIXED (division by zero)
+// ============================================================
 
 const canvas = document.getElementById('swarm-canvas');
-const ctx = canvas.getContext('2d');
+const ctx    = canvas.getContext('2d');
 let width, height;
 let particles = [];
-const mouse = { x: -1000, y: -1000 };
+const mouse = { x: -9999, y: -9999 };
 
 function resize() {
-    width = canvas.width = window.innerWidth;
+    width  = canvas.width  = window.innerWidth;
     height = canvas.height = window.innerHeight;
 }
 window.addEventListener('resize', resize);
@@ -161,127 +309,96 @@ window.addEventListener('mousemove', (e) => {
 });
 
 class Particle {
-    constructor() {
-        this.reset();
-    }
-    
+    constructor() { this.reset(); }
+
     reset() {
-        this.x = Math.random() * width;
-        this.y = Math.random() * height;
-        this.size = Math.random() * 2 + 1;
-        this.baseX = this.x;
-        this.baseY = this.y;
-        this.density = (Math.random() * 30) + 1;
-        this.angle = Math.random() * Math.PI * 2;
-        this.speed = Math.random() * 2 + 0.5;
-        this.color = Math.random() > 0.5 ? '#06b6d4' : '#8b5cf6';
+        this.x       = Math.random() * width;
+        this.y       = Math.random() * height;
+        this.size    = Math.random() * 1.8 + 0.5;
+        this.angle   = Math.random() * Math.PI * 2;
+        this.speed   = Math.random() * 0.4 + 0.1;
+        this.color   = Math.random() > 0.5 ? '#06b6d4' : '#8b5cf6';
+        this.opacity = Math.random() * 0.6 + 0.2;
     }
 
     update() {
-        const centerX = width / 2;
+        const centerX = width  / 2;
         const centerY = height / 2;
 
         if (aiState === 'idle') {
-            // Float around, slight repel from mouse
-            this.x += Math.cos(this.angle) * (this.speed * 0.2);
-            this.y += Math.sin(this.angle) * (this.speed * 0.2);
-            
-            let dx = mouse.x - this.x;
-            let dy = mouse.y - this.y;
-            let distance = Math.sqrt(dx * dx + dy * dy);
-            if (distance < 150) {
-                this.x -= dx / 20;
-                this.y -= dy / 20;
+            this.x += Math.cos(this.angle) * this.speed;
+            this.y += Math.sin(this.angle) * this.speed;
+
+            const dx = mouse.x - this.x;
+            const dy = mouse.y - this.y;
+            const dist = Math.sqrt(dx * dx + dy * dy);
+            if (dist < 120 && dist > 0) {
+                this.x -= (dx / dist) * 2;
+                this.y -= (dy / dist) * 2;
             }
-            
-            // Wrap edges
-            if (this.x < 0) this.x = width;
-            if (this.x > width) this.x = 0;
-            if (this.y < 0) this.y = height;
+
+            if (this.x < 0)      this.x = width;
+            if (this.x > width)  this.x = 0;
+            if (this.y < 0)      this.y = height;
             if (this.y > height) this.y = 0;
 
         } else if (aiState === 'listening') {
-            // Swirl into a vortex at center
-            let dx = centerX - this.x;
-            let dy = centerY - this.y;
-            let dist = Math.sqrt(dx * dx + dy * dy);
-            
-            if (dist > 50) {
-                this.x += dx * 0.05 + Math.cos(this.angle) * 5;
-                this.y += dy * 0.05 + Math.sin(this.angle) * 5;
-            } else {
-                this.angle += 0.1;
-                this.x = centerX + Math.cos(this.angle) * 50;
-                this.y = centerY + Math.sin(this.angle) * 50;
-            }
-            this.color = '#06b6d4'; // Cyan listening
+            const dx = centerX - this.x;
+            const dy = centerY - this.y;
+            const dist = Math.sqrt(dx * dx + dy * dy);
+            this.x += dist > 60 ? dx * 0.04 + Math.cos(this.angle) * 3 : Math.cos(this.angle += 0.08) * 60;
+            this.y += dist > 60 ? dy * 0.04 + Math.sin(this.angle) * 3 : Math.sin(this.angle)           * 60;
+            this.color = '#06b6d4';
 
         } else if (aiState === 'thinking') {
-            // Tight fast purple vortex
-            let dx = centerX - this.x;
-            let dy = centerY - this.y;
-            let dist = Math.sqrt(dx * dx + dy * dy);
-            
-            if (dist > 30) {
-                this.x += dx * 0.1;
-                this.y += dy * 0.1;
-            }
-            this.angle += 0.2;
-            this.x += Math.cos(this.angle) * 10;
-            this.y += Math.sin(this.angle) * 10;
-            this.color = '#ec4899'; // Pink thinking
+            const dx = centerX - this.x;
+            const dy = centerY - this.y;
+            this.x += dx * 0.07;
+            this.y += dy * 0.07;
+            this.angle += 0.15;
+            this.x += Math.cos(this.angle) * 6;
+            this.y += Math.sin(this.angle) * 6;
+            this.color = '#ec4899';
 
         } else if (aiState === 'speaking') {
-            // Pulse outward and drift back (like a sound wave)
-            let dx = this.x - centerX;
-            let dy = this.y - centerY;
-            let dist = Math.sqrt(dx * dx + dy * dy);
-            
-            // Pulse effect simulated by moving outward slightly then drifting
-            let pulseForce = Math.sin(Date.now() / 200) * 5;
-            
-            this.x += (dx / dist) * pulseForce + (Math.random() - 0.5) * 2;
-            this.y += (dy / dist) * pulseForce + (Math.random() - 0.5) * 2;
-            
-            // Gently pull back if too far
-            if (dist > 300) {
-                this.x -= dx * 0.01;
-                this.y -= dy * 0.01;
+            const dx   = this.x - centerX;
+            const dy   = this.y - centerY;
+            // Bug Fix: Guard against division by zero when dist === 0
+            const dist = Math.sqrt(dx * dx + dy * dy);
+            if (dist > 0) {
+                const pulse = Math.sin(Date.now() / 180) * 4;
+                this.x += (dx / dist) * pulse + (Math.random() - 0.5) * 1.5;
+                this.y += (dy / dist) * pulse + (Math.random() - 0.5) * 1.5;
+                if (dist > 280) {
+                    this.x -= dx * 0.015;
+                    this.y -= dy * 0.015;
+                }
             }
-            
-            this.color = Math.random() > 0.5 ? '#8b5cf6' : '#10b981'; // Purple/Green speaking
+            this.color = Math.random() > 0.5 ? '#8b5cf6' : '#10b981';
         }
     }
 
     draw() {
+        ctx.save();
+        ctx.globalAlpha = this.opacity;
+        ctx.shadowBlur  = 8;
+        ctx.shadowColor = this.color;
+        ctx.fillStyle   = this.color;
         ctx.beginPath();
         ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-        ctx.fillStyle = this.color;
-        
-        // Add glow
-        ctx.shadowBlur = 10;
-        ctx.shadowColor = this.color;
-        
         ctx.fill();
-        ctx.shadowBlur = 0; // Reset
+        ctx.restore();
     }
 }
 
 // Init particles
-for (let i = 0; i < 400; i++) {
-    particles.push(new Particle());
-}
+for (let i = 0; i < 350; i++) particles.push(new Particle());
 
-// Animation Loop
+// Animation loop
 function animate() {
-    // Semi-transparent black to create trailing effect
-    ctx.fillStyle = 'rgba(0, 0, 0, 0.15)';
+    ctx.fillStyle = 'rgba(5, 8, 16, 0.2)';
     ctx.fillRect(0, 0, width, height);
-
-    for (let i = 0; i < particles.length; i++) {
-        particles[i].update();
-        particles[i].draw();
-    }
+    particles.forEach(p => { p.update(); p.draw(); });
     requestAnimationFrame(animate);
 }
 

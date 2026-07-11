@@ -3,64 +3,168 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CampusConnect AI</title>
+    <title>CampusConnect AI — GITAM University Voice Assistant</title>
+    <meta name="description" content="CampusConnect is an AI-powered voice assistant for GITAM University. Ask anything about the campus, hostels, facilities, and more.">
     <link rel="stylesheet" href="style.css">
-    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
 </head>
 <body>
-    <!-- The Living Background -->
+
+    <!-- Animated Background Canvas -->
     <canvas id="swarm-canvas"></canvas>
 
-    <!-- UI Overlay Layer -->
-    <div class="ui-layer">
-        
-        <!-- Header -->
-        <header>
+    <!-- Full App Layout -->
+    <div class="app-layout">
+
+        <!-- ===== HEADER ===== -->
+        <header id="main-header">
             <div class="logo">
-                <span class="material-icons">school</span>
-                <h1>CampusConnect <span>AI</span></h1>
+                <div class="logo-icon">
+                    <span class="material-icons-round">school</span>
+                </div>
+                <div class="logo-text">
+                    <h1>CampusConnect <span class="accent">AI</span></h1>
+                    <p class="logo-sub">GITAM University, Visakhapatnam</p>
+                </div>
             </div>
-            <div class="status-indicator">
-                <span class="dot" id="system-status-dot"></span>
-                <span id="system-status-text">System Online</span>
+            <div class="header-right">
+                <div class="status-pill" id="status-pill">
+                    <span class="status-dot" id="status-dot"></span>
+                    <span id="status-text">System Online</span>
+                </div>
+                <button class="icon-btn" id="info-toggle-btn" title="About this project" aria-label="About">
+                    <span class="material-icons-round">info_outline</span>
+                </button>
             </div>
         </header>
 
-        <!-- Central Interaction Hint -->
-        <div class="center-hint" id="interaction-hint">
-            <h2 id="ai-status">CLICK ANYWHERE TO AWAKEN</h2>
-            <p>Speak clearly into your microphone.</p>
+        <!-- ===== MAIN BODY ===== -->
+        <main class="main-content">
+
+            <!-- LEFT: Chat Panel -->
+            <section class="panel chat-panel" id="chat-panel">
+                <div class="panel-header">
+                    <span class="material-icons-round">chat_bubble_outline</span>
+                    <h2>Conversation</h2>
+                </div>
+                <div class="chat-messages" id="chat-messages">
+                    <div class="message ai">
+                        <div class="avatar ai-avatar"><span class="material-icons-round">smart_toy</span></div>
+                        <div class="bubble">Hello! I am the CampusConnect AI. Press the microphone button and ask me anything about GITAM University campus, hostels, facilities, and more.</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- CENTER: Orb & Controls -->
+            <section class="center-panel">
+
+                <!-- AI Orb Visualization -->
+                <div class="orb-container" id="orb-container">
+                    <div class="orb-ring ring-3"></div>
+                    <div class="orb-ring ring-2"></div>
+                    <div class="orb-ring ring-1"></div>
+                    <div class="orb-core" id="orb-core">
+                        <span class="material-icons-round orb-icon" id="orb-icon">record_voice_over</span>
+                    </div>
+                </div>
+
+                <!-- Status Message -->
+                <div class="ai-status-label" id="ai-status-label">READY</div>
+                <p class="ai-status-sub" id="ai-status-sub">Press the microphone to ask a question</p>
+
+                <!-- Microphone Button -->
+                <button class="mic-btn" id="mic-btn" aria-label="Press to speak">
+                    <div class="mic-ripple"></div>
+                    <span class="material-icons-round" id="mic-icon">mic</span>
+                </button>
+
+                <!-- Quick Question Chips -->
+                <div class="chips-section">
+                    <p class="chips-label">Try asking:</p>
+                    <div class="chips" id="chips-container">
+                        <button class="chip" data-question="Where is the campus located?">📍 Campus Location</button>
+                        <button class="chip" data-question="Tell me about the boys hostels">🏠 Boys Hostels</button>
+                        <button class="chip" data-question="Tell me about the girls hostels">🏡 Girls Hostels</button>
+                        <button class="chip" data-question="Where can I eat food on campus?">🍽️ Canteen & Food</button>
+                        <button class="chip" data-question="What facilities does the campus have?">🏥 Facilities</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- RIGHT: Info Panel -->
+            <section class="panel info-panel" id="info-panel">
+                <div class="panel-header">
+                    <span class="material-icons-round">auto_stories</span>
+                    <h2>Knowledge Base</h2>
+                </div>
+                <div class="info-panel-content" id="info-panel-content">
+                    <div class="kb-card">
+                        <div class="kb-card-icon">📍</div>
+                        <div>
+                            <h3>Location</h3>
+                            <p>Gandhi Nagar, Rushikonda, Visakhapatnam — 255 Acres overlooking the Bay of Bengal</p>
+                        </div>
+                    </div>
+                    <div class="kb-card">
+                        <div class="kb-card-icon">🏠</div>
+                        <div>
+                            <h3>Boys Hostels (5)</h3>
+                            <p>Saddarma, Aditya, Vinay, Rabindra Sagar & Durgabai Deshmukh Sadan</p>
+                        </div>
+                    </div>
+                    <div class="kb-card">
+                        <div class="kb-card-icon">🏡</div>
+                        <div>
+                            <h3>Girls Hostels (3)</h3>
+                            <p>Kokila, Nirmala & Avanthika Sadan</p>
+                        </div>
+                    </div>
+                    <div class="kb-card">
+                        <div class="kb-card-icon">📚</div>
+                        <div>
+                            <h3>Academics</h3>
+                            <p>17 Academic Blocks including ICT Bhavan, Sir Visvesvaraya & Science Block</p>
+                        </div>
+                    </div>
+                    <div class="kb-card">
+                        <div class="kb-card-icon">🍽️</div>
+                        <div>
+                            <h3>Food</h3>
+                            <p>Vennela Canteen (main), multiple food courts & cafes across campus</p>
+                        </div>
+                    </div>
+                    <div class="kb-card">
+                        <div class="kb-card-icon">🏥</div>
+                        <div>
+                            <h3>Facilities</h3>
+                            <p>GITAM Hospital, KRC Library, Convention Center (1200 seats), Union Bank ATM</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+
+    </div>
+
+    <!-- Info Modal -->
+    <div class="modal-overlay" id="info-modal" role="dialog" aria-modal="true" aria-label="About CampusConnect">
+        <div class="modal-card">
+            <button class="modal-close" id="modal-close-btn" aria-label="Close"><span class="material-icons-round">close</span></button>
+            <div class="modal-icon"><span class="material-icons-round">school</span></div>
+            <h2>CampusConnect AI</h2>
+            <p>An intelligent voice assistant for GITAM University built using:</p>
+            <ul>
+                <li><strong>Twilio</strong> — Voice & Speech Recognition</li>
+                <li><strong>n8n</strong> — Workflow Automation Pipeline</li>
+                <li><strong>Groq + Llama-3</strong> — Ultra-fast AI inference</li>
+                <li><strong>Web Speech API</strong> — Browser voice support</li>
+            </ul>
+            <p class="modal-footer">Built with ❤️ using Antigravity AI</p>
         </div>
-
-        <!-- Hidden Drawer: Chat Transcript (Left) -->
-        <aside class="drawer left-drawer">
-            <div class="drawer-tab">
-                <span class="material-icons">chat</span>
-            </div>
-            <div class="drawer-content chat-transcript" id="chat-transcript">
-                <div class="message ai">
-                    <div class="bubble">I am listening. What do you seek?</div>
-                </div>
-            </div>
-        </aside>
-
-        <!-- Hidden Drawer: References (Right) -->
-        <aside class="drawer right-drawer">
-            <div class="drawer-tab">
-                <span class="material-icons">auto_stories</span>
-            </div>
-            <div class="drawer-content panel-content" id="reference-content">
-                <div class="empty-state">
-                    <span class="material-icons">search</span>
-                    <p>When I access my neural memory, the exact source data will appear here.</p>
-                </div>
-            </div>
-        </aside>
-
     </div>
 
     <script src="app.js"></script>
