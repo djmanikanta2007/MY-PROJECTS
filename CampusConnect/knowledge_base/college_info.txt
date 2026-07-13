@@ -1,34 +1,91 @@
-# GITAM University, Visakhapatnam Campus - Knowledge Base
+# Raghu Engineering College (REC) — Knowledge Base for AI Voice Assistant
 
 ## Overview
-GITAM (Gandhi Institute of Technology and Management) University is a premier educational institution located in Gandhi Nagar, Rushikonda, Visakhapatnam, Andhra Pradesh. The campus is spread over approximately 255 acres and is known for its modern academic and residential infrastructure. It overlooks the scenic Bay of Bengal, providing a beautiful and serene environment for students.
+Raghu Engineering College (REC) is one of the leading private engineering institutions in Andhra Pradesh, located amidst a serene and pollution-free environment on the outskirts of Visakhapatnam. Established in 1997 under the Raghu Educational Society, the college has built a strong reputation for academic excellence, industry-relevant curriculum, and holistic student development over more than two decades.
 
-## Academic & Administrative Blocks
-The campus features state-of-the-art infrastructure dedicated to various schools and departments:
-- **Academic Blocks:** The campus houses seventeen (17) academic blocks dedicated to engineering, management, science, pharmacy, and architecture. Important ones include the core Engineering Blocks (such as ICT Bhavan, Sir Visvesvaraya Bhavan, and the Science Block).
-- **Administrative Blocks:** There are two primary administrative buildings managing admissions, student affairs, and university operations.
+## Location & How to Reach
+- **Full Address:** Dakamarri, Bheemunipatnam Mandal, Visakhapatnam – 531 162, Andhra Pradesh
+- **Distance:** Approximately 35–38 km from Visakhapatnam city centre
+- **Phone:** 08933-225500 / 08933-225501
+- **Email:** rec@raghuenggcollege.com
+- **Website:** www.raghuenggcollege.com
+- **EAMCET Code:** RGTS
 
-## Hostels & Residential Blocks
-The university provides excellent residential facilities.
-**Boys' Hostels (5 Blocks):**
-1. Saddarma Sadan
-2. Aditya Sadan
-3. Vinay Sadan
-4. Rabindra Sagar Sadan
-5. Durgabai Deshmukh Sadan
+**How to Reach:**
+- By Road: APSRTC buses from Visakhapatnam RTC Complex to Bheemunipatnam. Auto-rickshaws and cabs from Bhimili to Dakamarri. NH 216 provides good connectivity.
+- By Train: Deboard at Visakhapatnam Railway Station, take APSRTC bus towards Bheemunipatnam (Bhimili).
+- By Air: Nearest airport is Visakhapatnam International Airport (VTZ), approximately 40–45 km from campus.
+- College Transport: REC operates its own bus service from multiple Visakhapatnam city pick-up points including Dwaraka Nagar, Steel Plant, and MVP Colony.
 
-**Girls' Hostels (3 Blocks):**
-1. Kokila Sadan
-2. Nirmala Sadan
-3. Avanthika Sadan
+## Accreditations & Approvals
+- **Affiliation:** JNTUK (Jawaharlal Nehru Technological University, Kakinada)
+- **Approved by:** AICTE (All India Council for Technical Education)
+- **Accredited by:** NAAC with "A+" Grade
+- **NBA Accreditation:** Civil Engineering, Mechanical Engineering, ECE, and CSE departments have received NBA re-accreditation
+- **Type:** Private Autonomous
+- **Other Approvals:** ISO Certified, Listed on NIRF, Member of IIRS-ISRO
 
-## Key Places & Central Facilities
-- **Knowledge Resource Center (KRC):** The central library is a massive, multi-story building acting as the primary hub for books, digital resources, and research materials.
-- **Vennela Canteen & Food Courts:** "Vennela" is the main campus canteen serving a wide variety of meals and snacks. There are several other food courts and cafes across the campus for students to hang out.
-- **Auditoriums & Convention Center:** The campus features multiple seminar halls, open-air theaters, and a large convention center capable of accommodating over 1,200 people for major events and fests (like the annual KALAKRITHI fest).
-- **Sports & Recreation:** The university has a massive playground, an indoor stadium, tennis courts, a modern gymnasium, and spaces for various student clubs to operate.
-- **Amenities:** The campus is fully equipped with medical facilities (GITAM Hospital), banking services (Union Bank of India), ATMs, and high-speed Wi-Fi connectivity across all blocks.
+## Management & Administration
+- **Founded under:** Raghu Educational Society
+- **Chairman / Correspondent:** Sri. L.V. Subba Rao (Raghu Educational Society)
+- **Group:** Part of the Raghu Group of Institutions, which includes Raghu Institute of Technology and other constituent colleges in Andhra Pradesh.
 
-## Additional Info
-- **Contact:** The campus is always open to student inquiries at the main Administrative Block.
-- **Transportation:** The university provides an extensive fleet of buses covering almost all parts of Visakhapatnam for day scholars.
+## Departments & Programs
+
+**B.Tech Undergraduate Programs (4-Year Duration):**
+1. Computer Science & Engineering (CSE)
+2. CSE – Artificial Intelligence & Machine Learning (CSE-AIML)
+3. CSE – Data Science (CSE-DS)
+4. CSE – Cyber Security (CSE-CyberSec)
+5. CSE – Internet of Things (CSE-IoT)
+6. Electronics & Communication Engineering (ECE)
+7. Electrical & Electronics Engineering (EEE)
+8. Mechanical Engineering
+9. Civil Engineering
+10. Basic Science & Humanities
+
+**Postgraduate Programs:**
+- M.Tech programs (2-Year Duration) in various specializations
+- MBA (Master of Business Administration) – 2 years, 60 seats, admission via ICET
+
+## Hostels & Residential Facilities
+- **Boys Hostel:** Separate boys hostel with furnished rooms (2/3/4 seater options), mess, laundry, 24/7 security, and Wi-Fi. Capacity: approximately 700 beds.
+- **Girls Hostel:** Separate girls hostel with furnished rooms, mess, dedicated security personnel, and Wi-Fi. Capacity: approximately 450 beds.
+- **Room Types:** Both AC and non-AC room categories are available.
+- **Hostel Mess:** Hygienic mess serving breakfast, lunch, and dinner with both vegetarian and non-vegetarian options.
+
+## Food & Canteen
+- **College Canteen:** Two canteens are located on campus providing affordable and hygienic meals for day scholars and staff.
+- **Canteen Timings:** Open from 09:00 AM to 09:00 PM.
+- **Cuisine:** Serves a variety of Indian and Chinese cuisine including breakfast and lunch options.
+
+## Key Campus Facilities
+- **Library:** Well-equipped central library with a large collection of books, periodicals, journals, and digital resources.
+- **Computer Centers:** Advanced computer labs with high-speed internet connectivity.
+- **Specialized Labs:** Nano Technology Lab, Electro Lounge, Coding Lounge, Invention Studio, Advanced Manufacturing Lab.
+- **Sports Complex:** Cricket ground, volleyball courts, basketball courts, badminton courts, football field, and indoor games facilities.
+- **Gymnasium:** Well-equipped gym available for students and staff.
+- **Medical Centre:** On-campus first-aid and basic medical facility with a tie-up with nearby hospitals.
+- **Auditorium:** Large auditorium for annual day events, cultural events, and guest lectures.
+- **Conference Hall:** Air-conditioned conference halls for seminars, faculty meetings, and workshops.
+- **Wi-Fi Campus:** Campus-wide high-speed Wi-Fi connectivity in hostels, labs, and all academic blocks.
+- **Power Backup:** Diesel generators for uninterrupted power supply; solar panels are installed on campus.
+- **CCTV Surveillance:** Campus-wide CCTV cameras for security.
+- **ATM:** ATM facility available on campus or in the near vicinity.
+
+## Training & Placement
+- **Placement Cell:** Active Training & Placement Cell (TPC) connects students with top companies throughout the year.
+- **Training Programs:** Year-round training in aptitude, soft skills, coding, domain knowledge, and mock interviews.
+- **Top Recruiters:** TCS, Infosys, Wipro, HCL Technologies, Cognizant, Tech Mahindra, Accenture, Capgemini, Microsoft, Amazon, Deloitte, IBM, Oracle, Zoho, BHEL, HPCL, NTPC, L&T, DRDO, ISRO (internships).
+
+## Student Activities
+- **NCC & NSS:** Active NCC and NSS units for community service and national development.
+- **Student Chapters:** IEEE, CSI, ISTE, and various department-level student chapters.
+- **Cultural & Technical Clubs:** Various cultural fests, technical competitions, and student clubs for holistic development.
+
+## Admission Process
+- **For B.Tech:** Qualify AP EAMCET → Register for Web Counselling → Attend Certificate Verification → Report to Allotted College.
+- **Government Quota:** ~70% of seats filled via AP EAMCET Web Counselling.
+- **Management Quota:** ~30% of seats filled via direct admissions. Contact the admissions cell directly.
+- **Lateral Entry:** Available for diploma holders (direct entry into B.Tech 2nd year).
+- **For MBA:** Admission through ICET (Integrated Common Entrance Test), AP.
