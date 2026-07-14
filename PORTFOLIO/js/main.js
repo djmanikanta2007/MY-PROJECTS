@@ -187,6 +187,15 @@ document.addEventListener('DOMContentLoaded', () => {
   // ──────────────────────────────────────────
 
   const projectData = {
+    'campusconnect': {
+      title: 'CampusConnect AI',
+      category: 'AI Voice Assistant',
+      image: 'assets/images/project-campusconnect.svg',
+      description: 'An intelligent, voice-powered AI assistant for Raghu Engineering College. Users can talk or type to ask anything about the campus, hostels, facilities, admissions, and more. Built with advanced speech recognition and natural language processing.<br><br><strong>Note:</strong> Requires microphone permission for voice features.',
+      features: ['Voice interaction via Web Speech API', 'Lightning fast LLM responses using Groq & Llama-3', 'Workflow automation via n8n', 'Custom RAG knowledge base for Raghu Engineering College', 'Responsive Glassmorphism UI'],
+      tags: ['AI', 'LLM', 'n8n', 'JavaScript', 'Voice API'],
+      link: 'https://djmanikanta2007.github.io/MY-PROJECTS/CampusConnect/frontend/'
+    },
     'student-result': {
       title: 'Student Result Management System',
       category: 'Software Development',
