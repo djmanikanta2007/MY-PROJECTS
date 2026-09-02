@@ -32,4 +32,3 @@ While the current version uses a strict System Prompt, the next iteration will i
 3. Use semantic search to dynamically inject only the most relevant paragraphs into the AI's prompt when a caller asks highly specific questions (e.g., department phone numbers or event schedules).
 
 ---
-*Built with ❤️ using Antigravity AI.*
