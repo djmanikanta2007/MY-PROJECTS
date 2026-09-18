@@ -1,0 +1,96 @@
+{
+  "name": "CampusConnect - Voice Assistant Workflow",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "twilio-voice",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "e8fb3e33-7b56-42d6-b258-2d8c368d1f2b",
+      "name": "Twilio Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1.1,
+      "position": [
+        200,
+        300
+      ],
+      "webhookId": "twilio-voice"
+    },
+    {
+      "parameters": {
+        "resource": "chat",
+        "model": "llama-3.1-8b-instant",
+        "messages": {
+          "messageValues": [
+            {
+              "role": "system",
+              "content": "You are CampusConnect, the official AI Voice Assistant for Raghu Engineering College (REC). Keep answers short (1-2 sentences max) because they are spoken over phone/voice. If information is not in knowledge base, say: 'I apologize, I do not have that detail. Please contact the administration.' Do not use markdown (*, #) or links.\n\nKnowledge Base:\n- College: Raghu Engineering College (REC), Visakhapatnam, established 1997 under Raghu Educational Society.\n- Location: Dakamarri, Bheemunipatnam Mandal, Visakhapatnam, Andhra Pradesh (~35 km from city).\n- Accreditations: JNTUK affiliated, AICTE approved, NAAC A+ grade, NBA accredited.\n- Administration: Chairman Sri L.V. Subba Rao, Principal Dr. Ch. Srinivasu, Vice Principal Dr. A. Vijay Kumar, Controller of Exams Dr. E.V.V. Ramana Murthy.\n- Programs: B.Tech in CSE, CSE-AIML, CSE-Data Science, CSE-Cyber Security, CSE-IoT, ECE, EEE, Mechanical, Civil; M.Tech and MBA.\n- Hostels: Boys hostel (~700 beds), Girls hostel (~450 beds), AC and non-AC rooms, Wi-Fi, mess.\n- Food: Two canteens on campus, open 9 AM to 9 PM, Indian and Chinese food.\n- Facilities: Central Library, Computer Labs, Specialized Labs, Sports Complex, Gym, Medical Centre, ATM.\n- Placements: Top recruiters TCS, Infosys, Wipro, Cognizant, Accenture, Microsoft, Amazon.\n- Admissions: AP EAMCET (Code: RGTS), 70% Convener quota, 30% Management quota."
+            },
+            {
+              "role": "user",
+              "content": "={{ $json.body.SpeechResult || $json.body.message || $json.query.SpeechResult || 'Hello' }}"
+            }
+          ]
+        }
+      },
+      "id": "0605a98d-6c1f-4b08-8e6d-74d1a385f0ef",
+      "name": "Groq Llama-3 (OpenAI Node)",
+      "type": "n8n-nodes-base.openAi",
+      "typeVersion": 1.1,
+      "position": [
+        450,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "respondWith": "text",
+        "responseBody": "={{ $json.body && $json.body.SpeechResult ? '<?xml version=\"1.0\" encoding=\"UTF-8\"?>\\n<Response>\\n    <Say voice=\"Polly.Aditi\">' + $json.message.content + '</Say>\\n    <Gather input=\"speech\" timeout=\"3\" speechTimeout=\"auto\" />\\n</Response>' : JSON.stringify({ answer: $json.message.content }) }}",
+        "options": {
+          "responseHeaders": {
+            "entries": [
+              {
+                "name": "Content-Type",
+                "value": "={{ $json.body && $json.body.SpeechResult ? 'text/xml' : 'application/json' }}"
+              }
+            ]
+          }
+        }
+      },
+      "id": "bd0531cd-bdfd-4a18-912f-9812423b01a6",
+      "name": "Respond to Webhook",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        700,
+        300
+      ]
+    }
+  ],
+  "connections": {
+    "Twilio Webhook": {
+      "main": [
+        [
+          {
+            "node": "Groq Llama-3 (OpenAI Node)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Groq Llama-3 (OpenAI Node)": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  }
+}

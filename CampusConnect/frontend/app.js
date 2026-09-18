@@ -18,8 +18,8 @@ const infoModal      = document.getElementById('info-modal');
 const modalCloseBtn  = document.getElementById('modal-close-btn');
 const chipsContainer = document.getElementById('chips-container');
 
-// n8n Webhook URL — this sends text-based browser queries
-const N8N_WEBHOOK_URL = 'https://veraa.app.n8n.cloud/webhook/twilio-voice';
+// Python FastAPI Webhook URL — this sends text-based browser queries
+const N8N_WEBHOOK_URL = 'http://localhost:8000/chat';
 
 // ============================================================
 // STATE MANAGEMENT
@@ -111,7 +111,10 @@ function speakText(text) {
 
     utterThis.onstart = () => setAiState('speaking');
     utterThis.onend   = () => setAiState('idle');
-    utterThis.onerror = () => setAiState('idle');
+    utterThis.onerror = (event) => {
+        console.error('Speech synthesis error:', event);
+        setAiState('idle');
+    };
 
     synth.speak(utterThis);
 }
