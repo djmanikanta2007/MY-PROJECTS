@@ -18,12 +18,11 @@ Navigating a massive university campus or scouring websites for simple answers c
 
 ## 🧠 The Knowledge Base
 The AI is strictly trained on a custom knowledge base to prevent hallucinations. Current trained data includes:
-- **Campus Details**: 255 acres at Rushikonda, Visakhapatnam, overlooking the Bay of Bengal.
-- **Boys Hostels**: 5 Blocks (Saddarma Sadan, Aditya Sadan, Vinay Sadan, Rabindra Sagar Sadan, and Durgabai Deshmukh Sadan).
-- **Girls Hostels**: 3 Blocks (Kokila Sadan, Nirmala Sadan, and Avanthika Sadan).
-- **Food**: Vennela Canteen is the main canteen.
-- **Academic Blocks**: 17 blocks including ICT Bhavan and Science Block.
-- **Facilities**: Knowledge Resource Center (Central Library), 1200-seater Convention Center, Raghu Hospital, Union Bank of India.
+- **Campus Details**: Located in Dakamarri, Visakhapatnam, offering a serene and pollution-free environment (~35 km from city centre).
+- **Hostels**: Separate hostels for boys (~700 beds) and girls (~450 beds) with AC and non-AC options, mess, and Wi-Fi.
+- **Food**: Two main college canteens on campus serving Indian and Chinese cuisine (09:00 AM to 09:00 PM).
+- **Academic Programs**: B.Tech in CSE (AIML, Data Science, Cyber Security, IoT), ECE, EEE, Mechanical, Civil, plus M.Tech and MBA.
+- **Facilities**: Central Library, specialized labs (Nano Tech, Electro Lounge, Coding Lounge), Sports Complex, Medical Centre, and ATM.
 
 ## 🔮 Future Improvements (RAG Integration)
 While the current version uses a strict System Prompt, the next iteration will integrate **Retrieval-Augmented Generation (RAG)**:
@@ -32,3 +31,4 @@ While the current version uses a strict System Prompt, the next iteration will i
 3. Use semantic search to dynamically inject only the most relevant paragraphs into the AI's prompt when a caller asks highly specific questions (e.g., department phone numbers or event schedules).
 
 ---
+
